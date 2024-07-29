@@ -16,6 +16,7 @@ export default (dc, config = {}) => {
         style: {
           display: "inline-block",
           height: "100%",
+          width: "100%",
           "transition-delay": "1ms",
         },
         ...config.slidesProps,
