@@ -15,6 +15,7 @@ export default (dc, config = {}) => {
         droppable: slidesSelector,
         style: {
           width: "600px",
+          height: "100%",
           margin: "0 auto",
           position: "relative",
           overflow: "hidden",

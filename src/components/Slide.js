@@ -18,6 +18,7 @@ export default (dc, config = {}) => {
           position: "relative",
           color: "#fff",
           width: "600px",
+          height: "100%",
           "margin-right": "10px",
           "vertical-align": "top",
           "min-height": "130px",

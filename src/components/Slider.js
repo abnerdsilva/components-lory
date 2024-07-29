@@ -57,6 +57,7 @@ export default (dc, config = {}) => {
         style: {
           position: "relative",
           width: "600px",
+          height: "300px",
           margin: "0 auto",
         },
 
