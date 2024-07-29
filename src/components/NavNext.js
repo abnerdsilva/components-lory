@@ -1,41 +1,40 @@
-import constants from '../constants';
-import { elHasClass } from '../utils';
+import constants from "../constants";
+import { elHasClass } from "../utils";
 
 export default (dc, config = {}) => {
-  const defaultType = dc.getType('default');
+  const defaultType = dc.getType("default");
   const defaultModel = defaultType.model;
   const { nextName, nextId, sliderSelector } = constants;
   const classId = config.classNext;
   const type = nextName;
 
   dc.addType(type, {
-
-    model: defaultModel.extend({
+    model: {
       defaults: {
         ...defaultModel.prototype.defaults,
-        name: 'Nav Next',
+        name: "Nav Next",
         copyable: 0,
         draggable: sliderSelector,
         style: {
-          position: 'absolute',
-          display: 'block',
-          cursor: 'pointer',
-          top: '50%',
+          position: "absolute",
+          display: "block",
+          cursor: "pointer",
+          top: "50%",
           right: 0,
-          'margin-top': '-25px',
+          "margin-top": "-25px",
         },
-        ...config.nextProps
+        ...config.nextProps,
       },
 
       init() {
-        this.get('classes').pluck('name').indexOf(classId) < 0 && this.addClass(classId);
-      }
-    }, {
-      isComponent(el) {
-        if (elHasClass(el, classId)) return { type };
+        this.get("classes").pluck("name").indexOf(classId) < 0 &&
+          this.addClass(classId);
       },
-    }),
+    },
+    isComponent(el) {
+      if (elHasClass(el, classId)) return { type };
+    },
 
-    view: defaultType.view
+    view: defaultType.view,
   });
-}
+};
