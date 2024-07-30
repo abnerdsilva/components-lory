@@ -7,6 +7,8 @@ export default grapesjs.plugins.add(
   (editor, opts = {}) => {
     const options = {
       ...{
+        categoryName: "Extra",
+
         // Object to extend the default slider block, eg. `{ label: 'Slider', attributes: { ... } }`
         // Pass a falsy value to avoid adding the block
         sliderBlock: {},
