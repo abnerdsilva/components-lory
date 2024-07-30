@@ -27,11 +27,15 @@ export default (dc, config = {}) => {
 
         name: "Slider",
 
+        initialIndex: 0,
+        autoplay: false,
+        timeAutoplay: 10000,
+
         // Slides scrolled at once
         "slides-to-scroll": 1,
 
         // Enabled mouse events
-        "enable-mouse-events": false,
+        "enable-mouse-events": true,
 
         // Time in milliseconds for the animation of a valid slide attempt
         "slide-speed": 300,
@@ -43,7 +47,7 @@ export default (dc, config = {}) => {
         "snap-back-speed": 200,
 
         // Like carousel, works with multiple slides. (do not combine with rewind)
-        infinite: false,
+        infinite: true,
 
         // If slider reached the last slide, with next click the slider goes
         // back to the startindex. (do not combine with infinite)
@@ -99,6 +103,18 @@ export default (dc, config = {}) => {
             changeProp: 1,
             options: ["ease", "linear", "ease-in", "ease-out", "ease-in-out"],
           },
+          {
+            type: "checkbox",
+            label: "Autoplay",
+            name: "autoplay",
+            changeProp: 1,
+          },
+          {
+            type: "number",
+            label: "Time autoplay",
+            name: "timeAutoplay",
+            changeProp: 1,
+          },
         ],
 
         "script-deps": config.script,
@@ -106,13 +122,21 @@ export default (dc, config = {}) => {
         "class-slides": config.classSlides,
         "class-prev": config.classPrev,
         "class-next": config.classNext,
+        "class-next": config.classNext,
 
         script() {
           var el = this;
           var deps = "{[ script-deps ]}";
           var falsies = ["0", "false"];
           var infinite = "{[ infinite ]}";
+          var autoplay = "{[ autoplay ]}";
+          var timeAutoplay = "{[ timeAutoplay ]}";
+
           infinite = infinite == "true" ? 1 : parseInt(infinite, 10);
+          autoplay = autoplay == "true" ? true : false;
+          timeAutoplay =
+            timeAutoplay == "" ? 10000 : parseInt(timeAutoplay, 10);
+
           var options = {
             slidesToScroll: parseInt("{[ slides-to-scroll ]}", 10),
             enableMouseEvents:
@@ -123,6 +147,8 @@ export default (dc, config = {}) => {
             rewindSpeed: parseInt("{[ rewind-speed ]}", 10),
             snapBackSpeed: parseInt("{[ snap-back-speed ]}", 10),
             ease: "{[ ease ]}",
+            autoplay: autoplay,
+            timeAutoplay: timeAutoplay,
             classNameFrame: "{[ class-frame ]}",
             classNameSlideContainer: "{[ class-slides ]}",
             classNamePrevCtrl: "{[ class-prev ]}",
@@ -130,7 +156,16 @@ export default (dc, config = {}) => {
           };
 
           var initSlider = function () {
-            window.sliderLory = lory(el, options);
+            const lorySlider = lory(el, options);
+            window.sliderLory = lorySlider;
+
+            if (autoplay) {
+              window.sliderLoryIntervalId = setInterval(() => {
+                lorySlider.next();
+              }, timeAutoplay);
+            } else {
+              clearInterval(window.sliderLoryIntervalId);
+            }
           };
 
           if (deps && typeof lory == "undefined") {
@@ -162,6 +197,7 @@ export default (dc, config = {}) => {
           "infinite",
           "rewind",
           "ease",
+          "autoplay",
         ];
         const reactTo = props.map((prop) => `change:${prop}`).join(" ");
         this.listenTo(this.model, reactTo, this.render);
